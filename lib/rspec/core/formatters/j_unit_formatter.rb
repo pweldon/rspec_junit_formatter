@@ -22,9 +22,11 @@ class RSpec::Core::Formatters::JUnitFormatter < RSpec::Core::Formatters::BaseFor
     xml.instruct!
     xml.testsuites do
       examples_by_path.each do |path, examples|
+        name = path.gsub(/.rb$/,'').split('/').drop(common_prefix_length).join('.')
         xml.testsuite(:tests => examples.size,
                       :failures => examples.count { |e| e.execution_result[:status] != 'passed' },
-                      :package => path.gsub(/.rb$/,'').split('/').drop(common_prefix_length).join('.'),
+                      :package => name[0..-2],
+                      :name => name.last,
                       :errors => 0,
                       :time => '%.6f' % duration,
                       :timestamp => @start.iso8601) do
