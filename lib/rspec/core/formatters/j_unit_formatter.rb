@@ -16,8 +16,10 @@ class RSpec::Core::Formatters::JUnitFormatter < RSpec::Core::Formatters::BaseFor
     super
 
     examples_by_path = examples.group_by { |example| example.file_path }
-    common_prefix_length = examples_by_path.keys.map { |path| path.split('/').size }.min - 2
-    common_prefix_length = 0 if common_prefix_length < 0
+    if example_count > 0
+      common_prefix_length = examples_by_path.keys.map { |path| path.split('/').size }.min - 2
+      common_prefix_length = 0 if common_prefix_length < 0
+    end
 
     xml.instruct!
     xml.testsuites do
